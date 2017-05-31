@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    password: 1111
+    username: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?verifyServerCertificate=false&useSSL=true
+  mail:
+      host: smtp.qq.com
+      username: 879604213@qq.com
+      password: elqokecmeqqbbeba
+      properties:
+       mail:
+        smtp:
+         auth: true
+         starttls:
+          enable: true
+          required: true
+
+
+server:
+  port: 8080
+
+mybatis:
+    type-aliases-package: springbootio.entity
+    mapper-locations: classpath:mapper/*.xml
+
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 604800
+  tokenHead: "Bearer "
+  route:
+    authentication:
+      path: "auth"
+      refresh: "refresh"
+      register: "auth/register"
+
+# 设置邮箱主机
+#spring:
+

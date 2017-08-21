@@ -1,44 +1,62 @@
-package springbootio.entity.auth;
+package springbootio.entity.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 import java.util.Collection;
 import java.util.Date;
 
-
+/**
+ * JWT保存的用户信息
+ * Created by muyi on 17-4-12.
+ */
 public class JwtUser implements UserDetails {
-    private final int id;
-    private final String username;
-    private final String password;
-    private final Collection<? extends GrantedAuthority> authorities;
-    private final Date lastPasswordResetDate;
+
+    //只为安全服务的类  用来获取用户验证等信息
+    private int id;
+    private String username;
+    private String password;
+    private String email;
 
 
-    public JwtUser(
-            int id,
-            String username,
-            String password,
-            Collection<? extends GrantedAuthority> authorities,
-            Date lastPasswordResetDate) {
+    public JwtUser(int id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.authorities =  authorities;
-        this.lastPasswordResetDate = lastPasswordResetDate;
-
+        this.email = email;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @JsonIgnore
-    public int getId() {
-        return id;
+        return null;
     }
 
     @JsonIgnore
@@ -75,12 +93,4 @@ public class JwtUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    @JsonIgnore
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
-    }
-
-
-
 }

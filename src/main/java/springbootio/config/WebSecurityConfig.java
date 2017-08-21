@@ -1,5 +1,6 @@
 package springbootio.config;
 
+import jdk.nashorn.internal.objects.annotations.Constructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import springbootio.config.filter.JwtAuthenticationTokenFilter;
+
+
+/**
+ *鉴权认证:
+ *  @EnableWebSecurity 注解和 @configuration 注解一起使用，然后，再定义 WebSecurityConfigurer 类型的类
+ *  或者 继承 WebSecurityConfigurerAdapter类就构成了 Spring Security 的配置。
+ *  这样，我们就可以配置 用户权限，什么 url 什么人才可以访问等等的一些安全控制。
+ **/
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
@@ -50,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                // 由于使用的是JWT，我们这里不需要csrf
+                // 由于使用的是JWT，我们这里不需要csrf 防御机制，跨域请求伪造
                 .csrf().disable()
 
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -72,11 +80,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 // 对于获取token的rest api要允许匿名访问
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/springbootio/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 
-        // 添加JWT filter
+        // 添加JWT filter   .class?
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 

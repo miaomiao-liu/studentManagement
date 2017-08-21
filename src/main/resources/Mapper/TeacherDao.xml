@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springbootio.dao.TeacherDao">
+
+<select id="queryTeacherById" parameterType="int" resultType="springbootio.entity.persistence.TeacherDetail">
+
+        SELECT * FROM teacher_detail WHERE id=#{id}
+
+</select>
+
+    <select id="queryTeacherByName" parameterType="String" resultType="springbootio.entity.persistence.TeacherDetail">
+
+        SELECT * FROM teacher_detail WHERE username=#{username}
+
+    </select>
+
+
+<insert id="addTeacher" parameterType="springbootio.entity.persistence.TeacherDetail">
+
+        INSERT INTO teacher_detail
+        (username,
+        sex,
+        university,
+        phonenumber)
+        VALUES
+        (#{username},
+        #{sex},
+        #{university},
+        #{phoneNumber})
+
+</insert>
+
+
+<update id="updateTeacher" parameterType="springbootio.entity.persistence.TeacherDetail">
+
+         UPDATE teacher_detail
+         SET
+         username=#{username},
+         sex=#{sex},
+         university=#{university},
+         phonenumber=#{phoneNumber})
+         WHERE id=#{id}
+
+</update>
+
+    <!--添加老师注册信息-->
+    <insert id="addTeacherInfo" parameterType="springbootio.entity.persistence.TeacherInfo">
+
+        INSERT INTO teacher_detail
+        (username,
+        password,
+        email)
+        VALUES
+        (#{username},
+        #{password},
+        #{email})
+
+    </insert>
+
+    <select id="selectTeacherInfoByName" parameterType="String" resultType="springbootio.entity.persistence.TeacherInfo">
+
+        SELECT * FROM teacher_detail WHERE username = #{username}
+
+    </select>
+
+    <select id="queryTeacherInfoById" parameterType="int" resultType="springbootio.entity.persistence.TeacherInfo">
+
+        SELECT * FROM teacher_detail WHERE id=#{id}
+
+    </select>
+
+    <select id="selectTeacherInfoByEmail" parameterType="String" resultType="springbootio.entity.persistence.TeacherInfo">
+
+        SELECT * from teacher_detail WHERE email=#{email}
+
+    </select>
+
+</mapper>

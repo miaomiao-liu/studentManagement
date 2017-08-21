@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springbootio.dao.GradeDao">
+
+
+    <select id="queryGrade" parameterType="int" resultType="springbootio.entity.persistence.GradeDetail">
+
+        SELECT * FROM grade_detail WHERE studetNumber=#{studentNumber}
+
+    </select>
+
+    <insert id="addGrade" parameterType="springbootio.entity.persistence.GradeDetail">
+
+        INSERT INTO grade_detail
+        (studentNumber,
+        username,
+        allgrade,
+        math,
+        english)
+        VALUES
+        #{studentNumber},
+        #{username},
+        #{allgrade},
+        #{math},
+        #{english})
+
+    </insert>
+
+    <update id="updateGeade" parameterType="springbootio.entity.persistence.GradeDetail">
+
+        UPDATE grade_detail
+        SET
+        username=#{username},
+        allgrade=#{allgrade},
+        math=#{math},
+        english=#{english}
+        WHERE studentNumber=#{studentNumber}
+
+    </update>
+
+</mapper>

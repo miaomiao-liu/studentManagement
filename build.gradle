@@ -40,5 +40,6 @@ dependencies {
 	compile('org.projectlombok:lombok')
 	compile('io.jsonwebtoken:jjwt:0.6.0')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile ('org.springframework.boot:spring-boot-starter-aop')
 
 }

@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    password: miaomiao
+    username: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?verifyServerCertificate=false&useSSL=true
+
+server:
+  port: 8080
+
+mybatis:
+    type-aliases-package: springbootio.entity
+    mapper-locations: classpath:Mapper/*.xml
+
+
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 86400
+  tokenHead: "Bearer "

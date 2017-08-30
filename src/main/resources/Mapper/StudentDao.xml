@@ -4,29 +4,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="springbootio.dao.StudentDao">
 
-
-    <select id="queryStudentById" parameterType="int" resultType="springbootio.entity.persistence.StudentDetail">
-
-        SELECT * FROM student_detail WHERE id=#{id}
-
-    </select>
-
     <select id="queryStudentByName" parameterType="String" resultType="springbootio.entity.persistence.StudentDetail">
 
         SELECT * FROM student_detail WHERE username = #{username}
 
     </select>
 
+    <select id="queryStudentByNumber" parameterType="int" resultType="springbootio.entity.persistence.StudentDetail">
+
+        SELECT * FROM student_detail WHERE student_number = #{studentNumber}
+
+    </select>
+
     <insert id="addStudent" parameterType="springbootio.entity.persistence.StudentDetail">
 
         INSERT INTO student_detail
-        (id,
+        (student_number,
         username,
         sex,
         university,
         phonenumber)
         VALUES
-        (#{id},
+        (#{studentNumber},
         #{username},
         #{sex},
         #{university},
@@ -38,18 +37,18 @@
 
         UPDATE student_detail
         SET
-        username=#{username},
+        username = #{username},
         sex=#{sex},
         university=#{university},
         phonenumber=#{phoneNumber}
-        WHERE id=#{id}
+        WHERE student_number = #{studentNumber}
 
     </update>
 
     <!-- 添加学生注册信息-->
-    <insert id="addStudentInfo" parameterType="springbootio.entity.persistence.StudentInfo">
+    <insert id="addStudentInfo" useGeneratedKeys="true" keyProperty="id" parameterType="springbootio.entity.persistence.StudentInfo">
 
-        INSERT INTO student_detail
+        INSERT INTO student_info
         (username,
         password,
         email)
@@ -63,13 +62,20 @@
     <!--查询学生注册信息-->
     <select id="selectStudentInfoByName" parameterType="String" resultType="springbootio.entity.persistence.StudentInfo">
 
-        SELECT * FROM student_detail WHERE username=#{username}
+        SELECT * FROM student_info WHERE username=#{username}
 
     </select>
 
     <select id="selectStudentInfoByEmail" parameterType="String" resultType="springbootio.entity.persistence.StudentInfo">
 
-        SELECT * FROM student_detail WHERE email = #{email}
+        SELECT * FROM student_info WHERE email = #{email}
+
+    </select>
+
+
+    <select id="selectStudentInfoById" parameterType="int" resultType="springbootio.entity.persistence.StudentInfo">
+
+        SELECT * FROM student_info WHERE id = #{id}
 
     </select>
 

@@ -2,7 +2,6 @@ package springbootio.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import springbootio.entity.persistence.GradeDetail;
 import springbootio.entity.persistence.TeacherDetail;
 import springbootio.entity.persistence.TeacherInfo;
 
@@ -13,26 +12,27 @@ import springbootio.entity.persistence.TeacherInfo;
 @Repository
 public interface TeacherDao {
 
-    //根据id查询详细个人信息
-    public TeacherDetail queryTeacherById(int id);
-
     //根据username查询详细个人信息
-    public TeacherDetail queryTeacherByName(String username);
+    TeacherDetail queryTeacherByName(String username);
+    //根据id查询详细个人信息
+    TeacherDetail queryTeacherByNumber(int teacherNumber);
 
     //添加个人信息
-    public int addTeacher(TeacherDetail teacherDetail);
+    int addTeacher(TeacherDetail teacherDetail);
 
     //更新老师个人信息
-    public int updateTeacher(TeacherDetail teacherDetail);
+    int updateTeacher(TeacherDetail teacherDetail);
+
+
 
     //添加注册信息
-    public int addTeacherInfo(TeacherInfo teacherInfo);
+    int addTeacherInfo(TeacherInfo teacherInfo);
 
     //
-    public TeacherInfo selectTeacherInfoByName(String username);
+    TeacherInfo selectTeacherInfoByName(String username);
 
     //
-    public TeacherInfo queryTeacherInfoById(int id);
+    TeacherInfo selectTeacherInfoById(int id);
 
-    public TeacherInfo selectTeacherInfoByEmail(String email);
+    TeacherInfo selectTeacherInfoByEmail(String email);
 }

@@ -5,22 +5,27 @@ package springbootio.entity.persistence;
  */
 public class StudentDetail {
     private int id;
+    private int studentNumber;
     private String username;
     private String sex;
     private String university;
-
     private long phoneNumber;
 
-    public StudentDetail(int id,
-                  String username,
-                  String sex,
-                  String university,
-                  long phoneNumber){
-        this.id=id;
-        this.username=username;
-        this.sex=sex;
-        this.university=university;
-        this.phoneNumber=phoneNumber;
+    public StudentDetail(int id, int studentNumber, String username, String sex, String university, long phoneNumber) {
+        this.id = id;
+        this.studentNumber = studentNumber;
+        this.username = username;
+        this.sex = sex;
+        this.university = university;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(int studentNumber) {
+        this.studentNumber = studentNumber;
     }
 
     public int getId() {

@@ -3,7 +3,34 @@ package springbootio.entity.persistence;
 /**
  * Created by miaomiao on 17-7-8.
  */
-public class GradeDetail {
+public class StudentGrade {
+
+    private int id;
+    private String username;
+    private int studentNumber;
+    private int allgrade;
+    private int math;
+    private int english;
+
+    public StudentGrade(int id, String username, int studentNumber, int allgrade, int math, int english) {
+        this.id = id;
+        this.username = username;
+        this.studentNumber = studentNumber;
+        this.allgrade = allgrade;
+        this.math = math;
+        this.english = english;
+    }
+
+    public StudentGrade() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -45,25 +72,4 @@ public class GradeDetail {
         this.english = english;
     }
 
-    private String username;
-    private int studentNumber;
-    private int allgrade;
-    private int math;
-    private int english;
-
-    public GradeDetail(String username,
-                       int studentNumber,
-                       int allgrade,
-                       int math,
-                       int english){
-        this.username=username;
-        this.studentNumber=studentNumber;
-        this.allgrade=allgrade;
-        this.math=math;
-        this.english=english;
-
-    }
-
-    public GradeDetail() {
-    }
 }

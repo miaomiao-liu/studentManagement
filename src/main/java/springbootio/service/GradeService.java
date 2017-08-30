@@ -1,14 +1,14 @@
 package springbootio.service;
 
-import springbootio.entity.persistence.GradeDetail;
+import springbootio.entity.persistence.StudentGrade;
 
 /**
  * Created by miaomiao on 17-7-9.
  */
 public interface GradeService {
-    public GradeDetail queryStudentGrade(int studentNumber);
+    public StudentGrade queryStudentGrade(int studentNumber);
 
-    public int addStudentGrade(GradeDetail gradeDetail);
+    public int addStudentGrade(StudentGrade gradeDetail);
 
-    public int updateStudentGrade(GradeDetail gradeDetail);
+    public int updateStudentGrade(StudentGrade gradeDetail);
 }

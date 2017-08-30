@@ -4,7 +4,34 @@ package springbootio.entity.persistence;
  * Created by miaomiao on 17-7-8.
  */
 public class TeacherDetail {
+
     private int id;
+    private int teacherNumber;
+    private String username;
+    private String sex;
+    private String university;
+    private long phoneNumber;
+
+
+    public TeacherDetail(int id, int teacherNumber, String username, String sex, String university, long phoneNumber) {
+        this.id = id;
+        this.teacherNumber = teacherNumber;
+        this.username = username;
+        this.sex = sex;
+        this.university = university;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public TeacherDetail() {
+    }
+
+    public int getTeacherNumber() {
+        return teacherNumber;
+    }
+
+    public void setTeacherNumber(int teacherNumber) {
+        this.teacherNumber = teacherNumber;
+    }
 
     public int getId() {
         return id;
@@ -44,28 +71,5 @@ public class TeacherDetail {
 
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-
-    private String username;
-    private String sex;
-    private String university;
-    private long phoneNumber;
-
-
-    public TeacherDetail(int id,
-                         String username,
-                         String sex,
-                         String university,
-                         long phoneNumber){
-        this.id=id;
-        this.username=username;
-        this.sex=sex;
-        this.university=university;
-        this.phoneNumber=phoneNumber;
-
-    }
-
-    public TeacherDetail() {
     }
 }

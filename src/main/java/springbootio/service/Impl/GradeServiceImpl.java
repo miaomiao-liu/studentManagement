@@ -3,7 +3,7 @@ package springbootio.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springbootio.dao.GradeDao;
-import springbootio.entity.persistence.GradeDetail;
+import springbootio.entity.persistence.StudentGrade;
 import springbootio.service.GradeService;
 
 /**
@@ -16,17 +16,17 @@ public class GradeServiceImpl implements GradeService{
     private GradeDao gradeDao;
 
     @Override
-    public GradeDetail queryStudentGrade(int studentNumber){
+    public StudentGrade queryStudentGrade(int studentNumber){
         return gradeDao.queryGrade(studentNumber);
     }
 
     @Override
-    public int addStudentGrade(GradeDetail gradeDetail){
+    public int addStudentGrade(StudentGrade gradeDetail){
         return gradeDao.addGrade(gradeDetail);
     }
 
     @Override
-    public int updateStudentGrade(GradeDetail gradeDetail){
+    public int updateStudentGrade(StudentGrade gradeDetail){
         return gradeDao.updateGeade(gradeDetail);
     }
 }

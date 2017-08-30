@@ -5,22 +5,22 @@
 <mapper namespace="springbootio.dao.GradeDao">
 
 
-    <select id="queryGrade" parameterType="int" resultType="springbootio.entity.persistence.GradeDetail">
+    <select id="queryGrade" parameterType="int" resultType="springbootio.entity.persistence.StudentGrade">
 
-        SELECT * FROM grade_detail WHERE studetNumber=#{studentNumber}
+        SELECT * FROM student_grade WHERE student_number=#{studentNumber}
 
     </select>
 
-    <insert id="addGrade" parameterType="springbootio.entity.persistence.GradeDetail">
+    <insert id="addGrade" parameterType="springbootio.entity.persistence.StudentGrade">
 
-        INSERT INTO grade_detail
-        (studentNumber,
+        INSERT INTO student_grade
+        (student_number,
         username,
         allgrade,
         math,
         english)
         VALUES
-        #{studentNumber},
+        (#{studentNumber},
         #{username},
         #{allgrade},
         #{math},
@@ -28,15 +28,15 @@
 
     </insert>
 
-    <update id="updateGeade" parameterType="springbootio.entity.persistence.GradeDetail">
+    <update id="updateGeade" parameterType="springbootio.entity.persistence.StudentGrade">
 
-        UPDATE grade_detail
+        UPDATE student_grade
         SET
         username=#{username},
         allgrade=#{allgrade},
         math=#{math},
         english=#{english}
-        WHERE studentNumber=#{studentNumber}
+        WHERE student_number=#{studentNumber}
 
     </update>
 

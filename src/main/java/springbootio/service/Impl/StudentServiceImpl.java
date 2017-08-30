@@ -9,10 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import springbootio.dao.GradeDao;
 import springbootio.dao.StudentDao;
-import springbootio.entity.persistence.GradeDetail;
 import springbootio.entity.persistence.StudentDetail;
+import springbootio.entity.persistence.StudentGrade;
 import springbootio.entity.persistence.StudentInfo;
+import springbootio.entity.view.JwtAuthenticationRequest;
+import springbootio.entity.view.JwtAuthenticationResponse;
 import springbootio.entity.view.JwtUserFactory;
 import springbootio.exception.StudentException;
 import springbootio.service.StudentService;
@@ -30,70 +33,84 @@ public class StudentServiceImpl implements StudentService {
     private  AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    GradeDao gradeDao;
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
-    public StudentDetail queryStudentDetailById(int id) throws StudentException  {
+    public StudentDetail queryStudentDetailById(int studentNumber) throws StudentException  {
         try {
-            return studentDao.queryStudentById(id);
+            StudentDetail studentDetail = studentDao.queryStudentByNumber(studentNumber);
+            if( studentDao.selectStudentInfoById(studentNumber) == null)
+                throw new StudentException("对不起！没有该学号的学生用户！");
+            if(studentDetail == null)
+                throw new StudentException("该学号学生没有添加学生信息！");
+            return studentDetail;
         }catch (Exception e){
-            throw new StudentException("数据库异常！");
+            throw e;
         }
     }
 
     @Override
     public StudentDetail queryStudentDetailByName(String username) throws StudentException{
         try {
-            return studentDao.queryStudentByName(username);
+            StudentDetail studentDetail = studentDao.queryStudentByName(username);
+            if( studentDao.selectStudentInfoByName(username) == null)
+                throw new StudentException("对不起！没有该用户名的学生用户！");
+            if(studentDetail == null)
+                throw new StudentException("该学生没有添加学生信息！");
+            return studentDetail;
         }catch (Exception e){
-            throw new StudentException("数据库异常！");
+            throw e;
         }
 
     }
 
     @Override
-    public int addStudentDetail(StudentDetail studentDetail) throws StudentException{
+    public String studentDetail(StudentDetail studentDetail,String username) throws StudentException{
         try {
-            return studentDao.addStudent(studentDetail);
+            studentDetail.setUsername(username);
+            if(studentDao.queryStudentByNumber(studentDetail.getStudentNumber()) == null) {
+                int num = studentDao.addStudent(studentDetail);
+                if (num != 1) {
+                    throw new StudentException("添加信息失败！");
+                }
+                return "添加信息成功！";
+            }else {
+                int num = studentDao.updateStudent(studentDetail);
+                if (num != 1) {
+                    throw new StudentException("更新信息失败！");
+                }
+                return "更新信息成功！";
+            }
         }catch (Exception e){
-            throw new StudentException("数据库异常！");
+            throw e;
         }
-
     }
 
     @Override
-    public int updateStudentDetail(StudentDetail studentDetail) throws StudentException{
-        try {
-            return studentDao.updateStudent(studentDetail);
-        }catch (Exception e){
-            throw new StudentException("数据库异常！");
-        }
-
-    }
-
-    @Override
-    public int registerStudent(StudentInfo studentInfo) throws StudentException{
+    public void registerStudent(StudentInfo studentInfo) throws StudentException{
         try{
+            if(studentDao.selectStudentInfoByName(studentInfo.getUsername()) != null){
+                throw new StudentException("对不起!该用户名已被注册！");
+            }
+            if(studentDao.selectStudentInfoByEmail(studentInfo.getEmail()) != null){
+                throw new StudentException("对不起！该邮箱已被注册！");
+            }
+
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             final String rawPassword = studentInfo.getPassword();
             studentInfo.setPassword(encoder.encode(rawPassword));
-            return studentDao.addStudentInfo(studentInfo);
+
+            int num = studentDao.addStudentInfo(studentInfo);;
+            if(num !=1) {
+                throw new StudentException("对不起！注册失败！");
+            }
         }catch (Exception e){
-            throw new StudentException("数据库异常！");
+            throw e;
         }
-
-    }
-
-    @Override
-    public StudentInfo queryStudentInfo(String username) throws StudentException {
-        try {
-            return studentDao.selectStudentInfoByName(username);
-        }catch (Exception e){
-            throw new StudentException("数据库异常！");
-        }
-
     }
 
     /**
@@ -116,19 +133,38 @@ public class StudentServiceImpl implements StudentService {
 
     //生成token 登录
     @Override
-    public String studentLogin(String username, String password) throws StudentException{
+    public JwtAuthenticationResponse studentLogin(JwtAuthenticationRequest authenticationRequest) throws StudentException{
         try {
-            UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-
+            StudentInfo studentInfo = studentDao.selectStudentInfoByName(authenticationRequest.getUsername());
+            if(studentInfo == null)
+                throw new StudentException("该用户不存在！");
+            String username = authenticationRequest.getUsername();
+            String password = authenticationRequest.getPassword();
+            UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username,password);
             final Authentication authentication = authenticationManager.authenticate(upToken);
             //存放authentication到SecurityContextHolder   自定义用户认证
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final UserDetails userDetails = JwtUserFactory.createStudent(studentDao.selectStudentInfoByName(username));
             final String token = jwtTokenUtil.generateToken(userDetails);
-            return token;
+            JwtAuthenticationResponse response = new JwtAuthenticationResponse(token,username);
+            return response;
         }catch (Exception e){
-            throw new StudentException("获取token异常！");
+            throw e;
         }
 
+    }
+
+    @Override
+    public StudentGrade queryGrade(int studentNumber) throws StudentException {
+        try {
+            StudentGrade studentGrade = gradeDao.queryGrade(studentNumber);
+            if (studentDao.queryStudentByNumber(studentNumber) == null)
+                throw new StudentException("对不起！查询成绩的学生学号不存在！");
+            if(studentGrade == null)
+                throw new StudentException("对不起！该学生学生成绩不存在！");
+            return studentGrade;
+        }catch (Exception e){
+            throw e;
+        }
     }
 }

@@ -4,28 +4,31 @@
                 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="springbootio.dao.TeacherDao">
 
-<select id="queryTeacherById" parameterType="int" resultType="springbootio.entity.persistence.TeacherDetail">
-
-        SELECT * FROM teacher_detail WHERE id=#{id}
-
-</select>
-
     <select id="queryTeacherByName" parameterType="String" resultType="springbootio.entity.persistence.TeacherDetail">
 
         SELECT * FROM teacher_detail WHERE username=#{username}
 
     </select>
 
+    <select id="queryTeacherByNumber" parameterType="int" resultType="springbootio.entity.persistence.TeacherDetail">
+
+        SELECT * FROM teacher_detail WHERE teacher_number=#{teacherNumber}
+
+    </select>
+
+
 
 <insert id="addTeacher" parameterType="springbootio.entity.persistence.TeacherDetail">
 
         INSERT INTO teacher_detail
-        (username,
+        (teacher_number,
+        username,
         sex,
         university,
         phonenumber)
         VALUES
-        (#{username},
+        (#{teacherNumber},
+        #{username},
         #{sex},
         #{university},
         #{phoneNumber})
@@ -40,15 +43,15 @@
          username=#{username},
          sex=#{sex},
          university=#{university},
-         phonenumber=#{phoneNumber})
-         WHERE id=#{id}
+         phonenumber=#{phoneNumber}
+         WHERE teacher_number=#{teacherNumber}
 
 </update>
 
     <!--添加老师注册信息-->
-    <insert id="addTeacherInfo" parameterType="springbootio.entity.persistence.TeacherInfo">
+    <insert id="addTeacherInfo" useGeneratedKeys="true" keyProperty="id" parameterType="springbootio.entity.persistence.TeacherInfo">
 
-        INSERT INTO teacher_detail
+        INSERT INTO teacher_info
         (username,
         password,
         email)
@@ -61,19 +64,19 @@
 
     <select id="selectTeacherInfoByName" parameterType="String" resultType="springbootio.entity.persistence.TeacherInfo">
 
-        SELECT * FROM teacher_detail WHERE username = #{username}
+        SELECT * FROM teacher_info WHERE username = #{username}
 
     </select>
 
-    <select id="queryTeacherInfoById" parameterType="int" resultType="springbootio.entity.persistence.TeacherInfo">
+    <select id="selectTeacherInfoById" parameterType="int" resultType="springbootio.entity.persistence.TeacherInfo">
 
-        SELECT * FROM teacher_detail WHERE id=#{id}
+        SELECT * FROM teacher_info WHERE id=#{id}
 
     </select>
 
     <select id="selectTeacherInfoByEmail" parameterType="String" resultType="springbootio.entity.persistence.TeacherInfo">
 
-        SELECT * from teacher_detail WHERE email=#{email}
+        SELECT * from teacher_info WHERE email=#{email}
 
     </select>
 

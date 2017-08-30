@@ -1,8 +1,10 @@
 package springbootio.service;
 
-import springbootio.entity.persistence.GradeDetail;
+import springbootio.entity.persistence.StudentGrade;
 import springbootio.entity.persistence.TeacherDetail;
 import springbootio.entity.persistence.TeacherInfo;
+import springbootio.entity.view.JwtAuthenticationRequest;
+import springbootio.entity.view.JwtAuthenticationResponse;
 import springbootio.exception.TeacherException;
 
 /**
@@ -10,20 +12,22 @@ import springbootio.exception.TeacherException;
  */
 public interface TeacherService {
 
-    public TeacherDetail queryTeacherDetailById(int id) throws TeacherException;
+    TeacherDetail queryTeacherDetailById(int teacherNumber) throws TeacherException;
 
-    public TeacherDetail queryTeacherDetailByName(String username) throws TeacherException;
+    TeacherDetail queryTeacherDetailByName(String username) throws TeacherException;
 
-    public int addTeacherDetail(TeacherDetail teacherDetail) throws TeacherException;
+    String teacherDetail(TeacherDetail teacherDetail,String username) throws TeacherException;
 
-    public int updateTeacherDetail(TeacherDetail teacherDetail) throws TeacherException;
-
-    public int registerTeacher(TeacherInfo teacherInfo) throws TeacherException;
-
-    public TeacherInfo queryTeacherInfoByName(String username) throws TeacherException;
-
-    public TeacherInfo queryTeacherInfo(int id) throws TeacherException;
+    void registerTeacher(TeacherInfo teacherInfo) throws TeacherException;
 
     //老师登录生成token
-    public String teacherLogin(String username,String password) throws TeacherException;
+    JwtAuthenticationResponse teacherLogin(JwtAuthenticationRequest authenticationRequest) throws TeacherException;
+
+    //添加学生成绩
+    void addStudentGrade(StudentGrade studentGrade) throws TeacherException;
+
+    //更新学生成绩
+    void updateStudentGrade(StudentGrade studentGrade)throws TeacherException;
+    //老师查询某个学生成绩
+    StudentGrade queryStudentGrade(int studentNumber) throws TeacherException;
 }

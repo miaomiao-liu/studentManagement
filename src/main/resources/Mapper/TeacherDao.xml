@@ -12,11 +12,9 @@
 
     <select id="queryTeacherByNumber" parameterType="int" resultType="springbootio.entity.persistence.TeacherDetail">
 
-        SELECT * FROM teacher_detail WHERE teacher_number=#{teacherNumber}
+        SELECT * FROM teacher_detail WHERE teacher_number = #{teacherNumber}
 
     </select>
-
-
 
 <insert id="addTeacher" parameterType="springbootio.entity.persistence.TeacherDetail">
 
@@ -25,7 +23,7 @@
         username,
         sex,
         university,
-        phonenumber)
+        phone_number)
         VALUES
         (#{teacherNumber},
         #{username},
@@ -43,7 +41,7 @@
          username=#{username},
          sex=#{sex},
          university=#{university},
-         phonenumber=#{phoneNumber}
+         phone_number=#{phoneNumber}
          WHERE teacher_number=#{teacherNumber}
 
 </update>
@@ -80,4 +78,11 @@
 
     </select>
 
+    <update id="updatePassword">
+
+        UPDATE teacher_info
+        SET password = #{password}
+        WHERE username = #{username}
+
+    </update>
 </mapper>

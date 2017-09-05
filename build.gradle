@@ -41,5 +41,7 @@ dependencies {
 	compile('io.jsonwebtoken:jjwt:0.6.0')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile ('org.springframework.boot:spring-boot-starter-aop')
+	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.32'
+	compile ('org.springframework.boot:spring-boot-starter-mail')
 
 }

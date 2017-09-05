@@ -5,12 +5,28 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/test?verifyServerCertificate=false&useSSL=true
 
+  mail:
+      host: smtp.163.com
+      username: 18280351947@163.com
+      password: xiangni2012
+      properties:
+       mail:
+        smtp:
+         auth: true
+         starttls:
+          enable: true
+          required: true
+
 server:
   port: 8080
 
 mybatis:
     type-aliases-package: springbootio.entity
     mapper-locations: classpath:Mapper/*.xml
+    configuration:
+            cache-enabled: true
+            use-column-label: true
+            map-underscore-to-camel-case: true
 
 
 jwt:

@@ -7,6 +7,7 @@ import springbootio.dao.TeacherDao;
 import springbootio.entity.persistence.StudentGrade;
 import springbootio.entity.persistence.TeacherDetail;
 import springbootio.entity.view.ResultData;
+import springbootio.exception.TeacherException;
 import springbootio.service.TeacherService;
 import springbootio.util.GetUsrName;
 
@@ -23,6 +24,8 @@ public class TeacherController {
     private TeacherService teacherService;
     @Autowired
     GetUsrName getUsrName;
+    @Autowired
+    TeacherDao teacherDao;
 
     //老师帐号 查询个人信息
     @GetMapping(value = "/queryTeacherNumber/{teacherNumber}")
@@ -33,7 +36,6 @@ public class TeacherController {
         }catch(Exception e){
             return new ResultData(false,e.getMessage());
         }
-
     }
 
     @GetMapping(value = "/queryTeacher/{name}")

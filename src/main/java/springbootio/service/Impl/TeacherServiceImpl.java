@@ -13,7 +13,6 @@ import springbootio.dao.GradeDao;
 import springbootio.dao.StudentDao;
 import springbootio.dao.TeacherDao;
 import springbootio.entity.persistence.StudentGrade;
-import springbootio.entity.persistence.StudentInfo;
 import springbootio.entity.persistence.TeacherDetail;
 import springbootio.entity.persistence.TeacherInfo;
 import springbootio.entity.view.JwtAuthenticationRequest;
@@ -34,15 +33,8 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherDao teacherDao;
     @Autowired
     private StudentDao studentDao;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
     @Autowired
     GradeDao gradeDao;
-    @Autowired
-    private UserDetailsService userDetailsService;
 
 
     @Override
@@ -57,7 +49,6 @@ public class TeacherServiceImpl implements TeacherService {
         }catch (Exception e){
             throw e;
         }
-
     }
 
     @Override
@@ -93,52 +84,6 @@ public class TeacherServiceImpl implements TeacherService {
         }catch(Exception e){
             throw e;
         }
-    }
-
-    //老师添加注册信息
-    @Override
-    public void registerTeacher(TeacherInfo teacherInfo) throws TeacherException{
-        try {
-            if(teacherDao.selectTeacherInfoByName(teacherInfo.getUsername()) != null) {
-                throw new TeacherException("对不起！该用户名已经被注册！");
-            }
-            if(teacherDao.selectTeacherInfoByEmail(teacherInfo.getEmail()) != null){
-                throw new TeacherException("对不起！该邮箱已被注册！");
-            }
-            BCryptPasswordEncoder encoder  = new BCryptPasswordEncoder();
-            final String rawPassword = teacherInfo.getPassword();
-            teacherInfo.setPassword(encoder.encode(rawPassword));
-
-            int num = teacherDao.addTeacherInfo(teacherInfo);
-            if(num != 1) {
-                throw new TeacherException("注册失败！");
-            }
-        }catch(Exception e){
-            throw e;
-        }
-    }
-
-
-    @Override
-    public JwtAuthenticationResponse teacherLogin(JwtAuthenticationRequest authenticationRequest) throws TeacherException{
-        try{
-            TeacherInfo teacherInfo = teacherDao.selectTeacherInfoByName(authenticationRequest.getUsername());
-            if(teacherInfo == null){
-                throw new TeacherException("该用户不存在！");
-            }
-            String username = authenticationRequest.getUsername();
-            String password = authenticationRequest.getPassword();
-            UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username,password);
-            final Authentication authentication = authenticationManager.authenticate(upToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            final UserDetails userDetails = JwtUserFactory.createTeacher(teacherDao.selectTeacherInfoByName(username));
-            final String token = jwtTokenUtil.generateToken(userDetails);
-            JwtAuthenticationResponse response = new JwtAuthenticationResponse(token,username);
-            return response;
-        }catch (Exception e){
-            throw e;
-        }
-
     }
 
     @Override

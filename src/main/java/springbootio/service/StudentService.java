@@ -21,12 +21,11 @@ public interface StudentService {
     //添加学生基本信息
    String studentDetail(StudentDetail studentDetail,String username) throws StudentException;
 
-    //添加学生注册信息
-    void registerStudent(StudentInfo studentInfo) throws StudentException;
-
-    //学生登录生成token
-    JwtAuthenticationResponse studentLogin( JwtAuthenticationRequest authenticationRequest) throws StudentException;
-
     //学生查询成绩
     StudentGrade queryGrade(int studentNumber) throws StudentException;
+
+    //学生更新密码
+//    void updatePassword() throws StudentException;
+
+
 }

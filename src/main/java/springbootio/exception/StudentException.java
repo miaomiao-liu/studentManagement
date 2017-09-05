@@ -3,7 +3,7 @@ package springbootio.exception;
 /**
  * Created by miaomiao on 17-7-8.
  */
-public class StudentException extends SpringbootioException {
+public class StudentException extends StudentManagementException {
 
     public StudentException(){
     }

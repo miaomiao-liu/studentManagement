@@ -4,7 +4,6 @@ package springbootio.entity.persistence;
  * Created by miaomiao on 17-7-8.
  */
 public class TeacherDetail {
-
     private int id;
     private int teacherNumber;
     private String username;
@@ -12,6 +11,8 @@ public class TeacherDetail {
     private String university;
     private long phoneNumber;
 
+    public TeacherDetail() {
+    }
 
     public TeacherDetail(int id, int teacherNumber, String username, String sex, String university, long phoneNumber) {
         this.id = id;
@@ -22,7 +23,12 @@ public class TeacherDetail {
         this.phoneNumber = phoneNumber;
     }
 
-    public TeacherDetail() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getTeacherNumber() {
@@ -31,14 +37,6 @@ public class TeacherDetail {
 
     public void setTeacherNumber(int teacherNumber) {
         this.teacherNumber = teacherNumber;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {

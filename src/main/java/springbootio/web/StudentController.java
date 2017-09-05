@@ -11,6 +11,7 @@ import springbootio.service.StudentService;
 import springbootio.util.GetUsrName;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Scanner;
 
 /**
  * Created by miaomiao on 17-7-8.
@@ -46,7 +47,6 @@ public class StudentController {
         }catch(Exception e){
             return new ResultData(false,e.getMessage());
         }
-
     }
 
     //注册之后
@@ -72,5 +72,12 @@ public ResultData queryStudentGradeByStudentNumber(@RequestParam int  studentNum
             return new ResultData(false,e.getMessage());
         }
 }
+
+//学生修改密码  验证旧密码？？？
+//@PostMapping("/updatePassword")
+// public ResultData updatePassword(){
+//
+//}
+
 
 }

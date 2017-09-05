@@ -30,14 +30,8 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentDao studentDao;
     @Autowired
-    private  AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
     GradeDao gradeDao;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @Override
     public StudentDetail queryStudentDetailById(int studentNumber) throws StudentException  {
@@ -90,69 +84,6 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    @Override
-    public void registerStudent(StudentInfo studentInfo) throws StudentException{
-        try{
-            if(studentDao.selectStudentInfoByName(studentInfo.getUsername()) != null){
-                throw new StudentException("对不起!该用户名已被注册！");
-            }
-            if(studentDao.selectStudentInfoByEmail(studentInfo.getEmail()) != null){
-                throw new StudentException("对不起！该邮箱已被注册！");
-            }
-
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            final String rawPassword = studentInfo.getPassword();
-            studentInfo.setPassword(encoder.encode(rawPassword));
-
-            int num = studentDao.addStudentInfo(studentInfo);;
-            if(num !=1) {
-                throw new StudentException("对不起！注册失败！");
-            }
-        }catch (Exception e){
-            throw e;
-        }
-    }
-
-    /**
-     * UsernamePasswordAuthenticationFilter的验证过程如下：
-
-     1. 首先过滤器会调用自身的attemptAuthentication方法，从request中取出authentication,
-     authentication是在org.springframework.security.web.context.SecurityContextPersistenceFilter
-     过滤器中通过捕获用户提交的登录表单中的内容生成的一个org.springframework.security.core.Authentication接口实例.
-
-     2. 拿到authentication对象后，过滤器会调用ProviderManager类的authenticate方法，并传入该对象
-
-     3.ProviderManager类的authenticate方法再调用自身的doAuthentication方法，在doAuthentication方法中
-     会调用类中的List<AuthenticationProvider> providers集合中的各个AuthenticationProvider接口实现类中的
-     authenticate(Authentication authentication)方法进行验证，由此可见，
-     真正的验证逻辑是由各个各个AuthenticationProvider接口实现类来完成的,DaoAuthenticationProvider类是默认情况
-     下注入的一个AuthenticationProvider接口实现类
-
-     4.AuthenticationProvider接口通过UserDetailsService来获取用户信息
-     **/
-
-    //生成token 登录
-    @Override
-    public JwtAuthenticationResponse studentLogin(JwtAuthenticationRequest authenticationRequest) throws StudentException{
-        try {
-            StudentInfo studentInfo = studentDao.selectStudentInfoByName(authenticationRequest.getUsername());
-            if(studentInfo == null)
-                throw new StudentException("该用户不存在！");
-            String username = authenticationRequest.getUsername();
-            String password = authenticationRequest.getPassword();
-            UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username,password);
-            final Authentication authentication = authenticationManager.authenticate(upToken);
-            //存放authentication到SecurityContextHolder   自定义用户认证
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            final UserDetails userDetails = JwtUserFactory.createStudent(studentDao.selectStudentInfoByName(username));
-            final String token = jwtTokenUtil.generateToken(userDetails);
-            JwtAuthenticationResponse response = new JwtAuthenticationResponse(token,username);
-            return response;
-        }catch (Exception e){
-            throw e;
-        }
-
-    }
 
     @Override
     public StudentGrade queryGrade(int studentNumber) throws StudentException {
@@ -167,4 +98,10 @@ public class StudentServiceImpl implements StudentService {
             throw e;
         }
     }
+
+    //学生修改密码
+//    @Override
+//    public void updatePassword() throws StudentException {
+//
+//    }
 }

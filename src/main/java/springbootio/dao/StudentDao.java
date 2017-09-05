@@ -1,6 +1,7 @@
 package springbootio.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import springbootio.entity.persistence.StudentDetail;
 import springbootio.entity.persistence.StudentInfo;
@@ -40,5 +41,6 @@ public interface StudentDao {
 
     StudentInfo selectStudentInfoByEmail(String email);
 
+    int updatePassword(@Param("password") String password,@Param("username") String userame);
 
 }

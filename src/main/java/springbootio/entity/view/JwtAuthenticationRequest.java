@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class JwtAuthenticationRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private int number;
     private String username;
     private String password;
 
@@ -14,6 +15,10 @@ public class JwtAuthenticationRequest implements Serializable {
     }
 
     public JwtAuthenticationRequest() {
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public String getUsername() {

@@ -23,7 +23,7 @@
         username,
         sex,
         university,
-        phonenumber)
+        phone_number)
         VALUES
         (#{studentNumber},
         #{username},
@@ -40,7 +40,7 @@
         username = #{username},
         sex=#{sex},
         university=#{university},
-        phonenumber=#{phoneNumber}
+        phone_number=#{phoneNumber}
         WHERE student_number = #{studentNumber}
 
     </update>
@@ -78,6 +78,14 @@
         SELECT * FROM student_info WHERE id = #{id}
 
     </select>
+
+    <update id="updatePassword">
+
+        UPDATE student_info
+        SET password = #{password}
+        WHERE username = #{username}
+
+    </update>
 
 </mapper>
 

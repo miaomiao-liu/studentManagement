@@ -18,11 +18,6 @@ public interface TeacherService {
 
     String teacherDetail(TeacherDetail teacherDetail,String username) throws TeacherException;
 
-    void registerTeacher(TeacherInfo teacherInfo) throws TeacherException;
-
-    //老师登录生成token
-    JwtAuthenticationResponse teacherLogin(JwtAuthenticationRequest authenticationRequest) throws TeacherException;
-
     //添加学生成绩
     void addStudentGrade(StudentGrade studentGrade) throws TeacherException;
 

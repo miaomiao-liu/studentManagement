@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import springbootio.entity.persistence.StudentInfo;
 import springbootio.entity.persistence.TeacherInfo;
 import springbootio.entity.view.*;
+import springbootio.enums.RegisterEnum;
+import springbootio.enums.VerifyEnum;
 import springbootio.service.AuthService;
 import springbootio.service.MailService;
 
@@ -23,13 +25,13 @@ public class AuthController {
     MailService mailService;
 
     //获取验证码
-    @PostMapping("/VerifyCodeForRegister")
+    @PostMapping("/verifyCodeForRegister")
     public ResultData getVerifyCodeForRegister(@RequestParam("username") String username,
                                                @RequestParam("mail") String mail){
         try {
             Map<String,Object> map = authService.getVerifyCodeForRegister(username,mail);
             if(map.isEmpty()) {
-                return new ResultData(true, "请到邮箱查看注册验证码！");
+                return new ResultData(true, VerifyEnum.CHECK_REGISTER_MAIL);
             }
             return new ResultData(false,map);
         } catch (Exception e) {
@@ -39,13 +41,13 @@ public class AuthController {
 
 
     //找回密码获取验证码
-    @PostMapping("/VerifyCodeForFindPwd")
+    @PostMapping("/verifyCodeForFindPwd")
     public ResultData getVerifyCodeForFindPwd(@RequestParam("username") String username,
                                               @RequestParam("mail") String mail){
         try {
             Map<String,Object> map = authService.getVerifyCodeForUpdatePwd(username,mail);
             if(map.isEmpty()) {
-                return new ResultData(true, "请到邮箱查看更改密码的验证码！");
+                return new ResultData(true, VerifyEnum.CHECK_PWD_MAIL);
             }
             return new ResultData(false,map);
         } catch (Exception e) {
@@ -54,7 +56,7 @@ public class AuthController {
     }
 
     //找回密码
-    @PostMapping("/studentFindPassword")
+    @PostMapping("/findPassword")
     public ResultData findPassword(@RequestBody FindPassword findPassword) {
         try {
             if(authService.FindPassword(findPassword) == 1){
@@ -72,7 +74,7 @@ public class AuthController {
         try{
             Map<String,Object> map = authService.registerStudent(studentInfo);
             if(map.isEmpty()) {
-                return new ResultData(true, studentInfo.getId(), "注册成功！");
+                return new ResultData(true, studentInfo.getId(), RegisterEnum.REGISTER_SUCCESS.getMsg());
             }else {
                 return new ResultData(false,map);
             }
@@ -97,8 +99,12 @@ public class AuthController {
     @PostMapping("/registerTeacher")
     public ResultData registerTeacherInfo(@RequestBody TeacherInfo teacherInfo){
         try {
-            authService.registerTeacher(teacherInfo);
-            return new ResultData(true, teacherInfo.getId(),"注册成功！");
+            Map<String,Object> map = authService.registerTeacher(teacherInfo);
+            if(map.isEmpty()) {
+                return new ResultData(true, teacherInfo.getId(), RegisterEnum.REGISTER_SUCCESS.getMsg());
+            }else {
+                return new ResultData(false,map);
+            }
         }catch(Exception e){
             return new ResultData(false,e.getMessage());
         }

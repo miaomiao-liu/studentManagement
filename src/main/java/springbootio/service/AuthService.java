@@ -33,7 +33,7 @@ public interface AuthService {
     JwtAuthenticationResponse studentLogin(JwtAuthenticationRequest authenticationRequest) throws StudentException;
 
     //添加老师注册信息
-    void registerTeacher(TeacherInfo teacherInfo) throws TeacherException;
+    Map<String,Object> registerTeacher(TeacherInfo teacherInfo) throws TeacherException;
 
     //老师登录生成token
     JwtAuthenticationResponse teacherLogin(JwtAuthenticationRequest authenticationRequest) throws TeacherException;

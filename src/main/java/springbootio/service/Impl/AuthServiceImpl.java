@@ -15,6 +15,8 @@ import springbootio.dao.TeacherDao;
 import springbootio.entity.persistence.StudentInfo;
 import springbootio.entity.persistence.TeacherInfo;
 import springbootio.entity.view.*;
+import springbootio.enums.RegisterEnum;
+import springbootio.enums.VerifyEnum;
 import springbootio.exception.StudentException;
 import springbootio.exception.TeacherException;
 import springbootio.service.AuthService;
@@ -47,19 +49,19 @@ public class AuthServiceImpl implements AuthService{
     public Map<String,Object> getVerifyCodeForRegister(String username, String mail) throws Exception {
         Map<String,Object> map = new HashMap<String,Object>();
         if(StringUtils.isEmpty(username)){
-            map.put("msgname","用户名不能为空");
+            map.put("msgname", VerifyEnum.EMPTY_USERNAME);
             return map;
         }
         if(StringUtils.isEmpty(mail)){
-            map.put("msgpwd","邮箱不能为空");
+            map.put("msgmail",VerifyEnum.EMPTY_EMAIL);
             return map;
         }
         if(studentDao.selectStudentInfoByName(username) != null || teacherDao.selectTeacherInfoByName(username) != null){
-            map.put("msgname","该用户名已被注册");
+            map.put("msgname",VerifyEnum.REPEAT_USERNAME);
             return map;
         }
         if(studentDao.selectStudentInfoByEmail(mail) != null || teacherDao.selectTeacherInfoByEmail(mail) != null){
-            map.put("msgmail","该邮箱已被注册");
+            map.put("msgmail",VerifyEnum.REPEAT_EMAIL);
             return map;
         }
         String verifyCode = mailService.sendRegisterMail(username,mail);
@@ -67,24 +69,32 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public Map<String, Object> getVerifyCodeForUpdatePwd(String username,String mail) throws Exception {
+    public Map<String, Object> getVerifyCodeForUpdatePwd(String username,String mail) {
         Map<String,Object> map = new HashMap<String,Object>();
+        if(StringUtils.isEmpty(username)){
+            map.put("msgname",VerifyEnum.EMPTY_USERNAME);
+            return map;
+        }
+        if(StringUtils.isEmpty(mail)){
+            map.put("msgmail",VerifyEnum.EMPTY_EMAIL);
+            return map;
+        }
         if(studentDao.selectStudentInfoByName(username) != null){
             if (!mail.equals(studentDao.selectStudentInfoByName(username).getEmail())){
-                map.put("msgmail","用户名与邮箱不匹配");
+                map.put("msgmail",VerifyEnum.MATE_USERNAME_MAIL);
                 return map;
             }
             String verifyCode = mailService.sendFindPwdMail(mail);
             return map;
         }else if (teacherDao.selectTeacherInfoByName(username) != null) {
             if (!mail.equals(teacherDao.selectTeacherInfoByName(username))) {
-                map.put("msgmail", "用户名与邮箱不匹配");
+                map.put("msgmail", VerifyEnum.MATE_USERNAME_MAIL);
                 return map;
             }
             String verifyCode = mailService.sendFindPwdMail(mail);
             return map;
         }else {
-            map.put("msgusername", "用户名不存在");
+            map.put("msgusername", VerifyEnum.NO_USER);
             return map;
         }
     }
@@ -108,14 +118,14 @@ public class AuthServiceImpl implements AuthService{
         Map<String,Object> map = new HashMap<String,Object>();
         final String password = studentInfo.getPassword();
         if(StringUtils.isEmpty(password)){
-            map.put("msgpwd","密码不能为空");
+            map.put("msgpwd", RegisterEnum.EMPTY_PWD.getMsg());
             return map;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         studentInfo.setPassword(encoder.encode(password));
         int num = studentDao.addStudentInfo(studentInfo);
         if(num !=1) {
-            map.put("msg","注册失败");
+            map.put("msg",RegisterEnum.REGISTER_FAIL.getMsg());
         }
         return map;
     }
@@ -163,25 +173,19 @@ public class AuthServiceImpl implements AuthService{
 
     //老师添加注册信息
     @Override
-    public void registerTeacher(TeacherInfo teacherInfo) throws TeacherException {
-        try {
-            if(teacherDao.selectTeacherInfoByName(teacherInfo.getUsername()) != null) {
-                throw new TeacherException("对不起！该用户名已经被注册！");
-            }
-            if(teacherDao.selectTeacherInfoByEmail(teacherInfo.getEmail()) != null){
-                throw new TeacherException("对不起！该邮箱已被注册！");
+    public Map<String,Object> registerTeacher(TeacherInfo teacherInfo) throws TeacherException {
+            Map<String,Object> map = new HashMap<String,Object>();
+            final String password = teacherInfo.getPassword();
+            if(StringUtils.isEmpty(password)){
+                map.put("msgpwd",RegisterEnum.EMPTY_PWD.getMsg());
             }
             BCryptPasswordEncoder encoder  = new BCryptPasswordEncoder();
-            final String rawPassword = teacherInfo.getPassword();
-            teacherInfo.setPassword(encoder.encode(rawPassword));
-
+            teacherInfo.setPassword(encoder.encode(password));
             int num = teacherDao.addTeacherInfo(teacherInfo);
             if(num != 1) {
-                throw new TeacherException("注册失败！");
+                map.put("msg",RegisterEnum.REGISTER_FAIL.getMsg());
             }
-        }catch(Exception e){
-            throw e;
-        }
+            return map;
     }
 
 

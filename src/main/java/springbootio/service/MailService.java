@@ -5,7 +5,7 @@ package springbootio.service;
  */
 public interface MailService {
 
-    String sendRegisterMail(String username,String to) throws Exception;
+    String sendRegisterMail(String username,String to) ;
 
-    String sendFindPwdMail(String to) throws Exception;
+    String sendFindPwdMail(String to) ;
 }

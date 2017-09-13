@@ -21,8 +21,8 @@ public class MailServiceImpl implements MailService {
     private String from;
 
     @Override
-    public String sendRegisterMail(String username, String to) throws Exception{
-        try {
+    public String sendRegisterMail(String username, String to) {
+//        try {
             String verifyCode = getRandomString();
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom(from);
@@ -31,14 +31,14 @@ public class MailServiceImpl implements MailService {
             mailMessage.setText("您正在注册学生管理平台，验证码："+verifyCode+",请在学生管理平台注册页面输入验证码以激活您的邮箱");
             sender.send(mailMessage);
             return verifyCode;
-        }catch (Exception e){
-         throw new Exception("邮件发送失败！");
-        }
+//        }catch (Exception e){
+//         throw new Exception("邮件发送失败！");
+//        }
     }
 
     @Override
-    public String sendFindPwdMail(String to) throws Exception{
-        try {
+    public String sendFindPwdMail(String to) {
+//        try {
             String verifyCode = getRandomString();
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom(from);
@@ -47,9 +47,9 @@ public class MailServiceImpl implements MailService {
             mailMessage.setText("你的学生管理平台账户正在申请修改密码，验证码：" + verifyCode);
             sender.send(mailMessage);
             return verifyCode;
-        }catch (Exception e){
-            throw new Exception("邮件发送失败！");
-        }
+//        }catch (Exception e){
+//            throw new Exception("邮件发送失败！");
+//        }
     }
 
 
